@@ -8,18 +8,17 @@ multiselect and search function
 - 아래 스크립트 옵션 본인이 필요한거에 맞춰 커스텀 가능
 
 
-  $('#chkveg').multiselect({
-		includeSelectAllOption: true,
-		enableFiltering: true,
-        	enableCaseInsensitiveFiltering: true,
-		filterBehavior: 'text', //text값으로 검색
-		//filterBehavior: 'value' -> value값으로 검색
-
-		filterFunction: function(element, query) {
-			var value = $(element).text().toLowerCase();
-			query = query.toLowerCase();
-			return value.indexOf(query) >= 0;
-		}
-	});
+$('#chkveg').multiselect({
+	includeSelectAllOption: true,
+	enableFiltering: true,
+	enableCaseInsensitiveFiltering: true,
+	filterBehavior: 'text', //text값으로 검색
+	//filterBehavior: 'value' value값으로 검색
+	filterFunction: function(element, query) {
+	var value = $(element).text().toLowerCase();
+	query = query.toLowerCase();
+	return value.indexOf(query) >= 0;
+	}
+});
 
 - 참고 : https://davidstutz.github.io/bootstrap-multiselect/
