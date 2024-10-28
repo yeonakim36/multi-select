@@ -11,7 +11,7 @@ multiselect and search function
   $('#chkveg').multiselect({
 		includeSelectAllOption: true,
 		enableFiltering: true,
-        enableCaseInsensitiveFiltering: true,
+        	enableCaseInsensitiveFiltering: true,
 		filterBehavior: 'text', //text값으로 검색
 		//filterBehavior: 'value' -> value값으로 검색
 
