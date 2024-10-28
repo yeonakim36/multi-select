@@ -41,7 +41,7 @@
 						<span class = "re_td2"><span class = "re_bold">대상인원</span></span>
 					</th>
 					<td>
-            <input type = "hidden" name = "edu_id" value = "<?php echo htmlspecialchars($code); ?>" class = "input_title">
+            					<input type = "hidden" name = "edu_id" value = "<?php echo htmlspecialchars($code); ?>" class = "input_title">
 						<div class = "selectpeople">
 							<select id="chkveg" multiple="multiple">
 								<?= $tbody_html_user?>
@@ -63,23 +63,23 @@
 </html>
 <? include "./foot.php";?>
 <script>
-	$(document).ready(function() {
-    $('.multiselect-selected-text').text('대상자 선택'); // span 내용 변경
-    });
+$(document).ready(function() {
+	$('.multiselect-selected-text').text('대상자 선택'); // span 내용 변경
+	});
   
-  	$('#chkveg').multiselect({
-  		includeSelectAllOption: true,
-  		enableFiltering: true,
-  		enableCaseInsensitiveFiltering: true,
-  		filterBehavior: 'text', //text값으로 검색
-  		//filterBehavior: 'value' -> value값으로 검색
-  
-  		filterFunction: function(element, query) {
-  			var value = $(element).text().toLowerCase();
-  			query = query.toLowerCase();
-  			return value.indexOf(query) >= 0;
-  		}
-  	});
+	$('#chkveg').multiselect({
+		includeSelectAllOption: true,
+		enableFiltering: true,
+		enableCaseInsensitiveFiltering: true,
+		filterBehavior: 'text', //text값으로 검색
+		//filterBehavior: 'value' -> value값으로 검색
+	
+		filterFunction: function(element, query) {
+			var value = $(element).text().toLowerCase();
+			query = query.toLowerCase();
+			return value.indexOf(query) >= 0;
+		}
+	});
   
   	$('#btnget').click(function() {
   		var selectedTexts = [];
@@ -90,48 +90,49 @@
   		$('#selectedValues').text(selectedValues);
   	});
   
-  	function goSubmit() {
-  		isSubmitClick = true;
-  		var edu_id = $("input[name='edu_id']").val();
-      var fnc = "education_add";
-      var userNames = [];
-      var userNameInputs = $('#chkveg').val()
-      var tot_user_name = userNameInputs.toString();
-  
-      for (var i = 0; i < userNameInputs.length; i++) {
-        if (userNameInputs[i].value !== '') {
-          var user_id = userNameInputs[i];
-          var completedRequests = 0;
-          $.ajax({
-            type: 'POST',
-            url: 'multiselect_add_form.php',
-            data: {
-              "function" : fnc,
-              "tot_user_name" : tot_user_name,
-              "edu_id" : edu_id,
-              "user_id" : user_id
-            },
-            dataType: 'json',
-            success: function(response) {
-              console.log(response.status);
-              if (response.status == 'success') {
-                completedRequests++;
-                if (completedRequests === userNameInputs.length) {
-                  alert('모든 업데이트가 완료되었습니다.');
-                  window.location.href = './your_page_url.php';
-                }
-              } else {
-                alert('오류가 발생했습니다: ' + response.msg);
-                console.log('Error: ' + response.msg);
-              }
-            },
-            error: function(xhr, status, error) {
-              alert('AJAX 오류입니다. 관리자에게 문의 바랍니다.');
-              console.log('AJAX Error: ' + status + ' - ' + error);
-            }
-          });
-        }
-      }
+	function goSubmit() {
+		isSubmitClick = true;
+		var edu_id = $("input[name='edu_id']").val();
+		var fnc = "education_add";
+		var userNames = [];
+		var userNameInputs = $('#chkveg').val()
+		var tot_user_name = userNameInputs.toString();
+		
+		for (var i = 0; i < userNameInputs.length; i++) {
+			if (userNameInputs[i].value !== '') {
+				var user_id = userNameInputs[i];
+				var completedRequests = 0;
+				
+				$.ajax({
+					type: 'POST',
+					url: 'multiselect_form.php',
+					data: {
+					"function" : fnc,
+					"tot_user_name" : tot_user_name,
+					"edu_id" : edu_id,
+					"user_id" : user_id
+				},
+				dataType: 'json',
+				success: function(response) {
+					console.log(response.status);
+					if (response.status == 'success') {
+						completedRequests++;
+						if (completedRequests === userNameInputs.length) {
+							alert('모든 업데이트가 완료되었습니다.');
+							window.location.href = './your_page_url.php';
+						}
+					} else {
+						alert('오류가 발생했습니다: ' + response.msg);
+						console.log('Error: ' + response.msg);
+					}
+				},
+				error: function(xhr, status, error) {
+					alert('AJAX 오류입니다. 관리자에게 문의 바랍니다.');
+					console.log('AJAX Error: ' + status + ' - ' + error);
+				}
+				});
+			}
+		}
 	}
 </script>
 <style>
