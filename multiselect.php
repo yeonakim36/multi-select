@@ -1,5 +1,5 @@
 <?php
-	function generateRandomCode($length = 6) {
+	function generateRandomCode($length = 6) { // 랜덤 코드 생성 및 출력
 		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		$randomCode = '';
 		
@@ -8,8 +8,14 @@
 		}
 		return $randomCode;
 	}
-	// 랜덤 코드 생성 및 출력
 	$code = generateRandomCode();
+
+	$SQL = " SELECT * FROM edu_table WHERE edu_id = '$edu_id' ";
+	$sql_query = mysqli_query($db_link, $SQL);
+	while($row = mysqli_fetch_array($sql_query)) {
+		$tot_user_name = $row["tot_user_name"];
+	}
+	$existing_users = array_map('trim', explode(',', $tot_user_name));
 ?>
 <!-- CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -27,13 +33,30 @@
 	<div class = "e_mid">
 		<div class = "body_table">
 			<table class = "tbl_score" id = "edu_table">
+				<!-- 처음 추가일경우1 (1 or 2 둘 중 하나만) -->
 				<?
-					$SQL = "SELECT  user_id, user_name  FROM table WHERE user_use = 1 order by user_group desc";
+					$SQL = "SELECT  user_id, user_name  FROM user_table WHERE user_use = 1 order by user_group desc";
 					$sql_query = mysqli_query($db_link, $SQL);
 					while($row = mysqli_fetch_array($sql_query)) {
 						$user_id = $row["user_id"];
 						$user_name = $row["user_name"];
 						$tbody_html_user .=  "<option value=\"$user_id\">$user_name</option>";
+					}
+				?>
+				<!-- 수정일경우2 (1 or 2 둘 중 하나만)  -->
+				<?
+					$SQL = "SELECT  user_no, user_id, user_name FROM user_table WHERE user_use = 1 order by user_group desc";
+					$sql_query = mysqli_query($db_link, $SQL);
+					while($row = mysqli_fetch_array($sql_query)) {
+						$user_no = $row["user_no"];
+						$user_id = $row["user_id"];
+						$user_name = $row["user_name"];
+						
+						if(in_array($user_id, $existing_users)) {
+							$tbody_html_user .= "<option value=\"$user_id\" selected>$user_name</option>";
+						} else {
+							$tbody_html_user .= "<option value=\"$user_id\">$user_name</option>";
+						}
 					}
 				?>
 				<tr id = "selectpep">
